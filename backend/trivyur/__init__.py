@@ -1,17 +1,37 @@
-import os
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
 
-from models import setup_db, Question, Category
+# Ading Flask-Migrate
+from flask_migrate import Migrate
+
+from config import Config
+
+db = SQLAlchemy()
 
 QUESTIONS_PER_PAGE = 10
 
-def create_app(test_config=None):
+def create_app(config_class=Config):
     # create and configure the app
     app = Flask(__name__)
-    setup_db(app)
+    app.config.from_object(Config)
+    
+    # setup_db(app)
+    db.app = app
+    db.init_app(app)
+    db.create_all()
+
+    # Adding Migrate
+    migrate = Migrate(app, db)
+    
+    
+    from trivyur.categories.routes import categories_bp
+    from trivyur.questions.routes import questions_bp
+    app.register_blueprint(categories_bp)
+    app.register_blueprint(questions_bp)
+
+
 
     """
     @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
