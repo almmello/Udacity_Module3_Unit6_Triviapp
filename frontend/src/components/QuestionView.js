@@ -34,7 +34,8 @@ class QuestionView extends Component {
         return;
       },
       error: (error) => {
-        alert('Unable to load questions. Please try your request again');
+        // Changed the error message to be uniq
+        alert('Unable to load questions with page. Please try your request again');
         return;
       },
     });
@@ -52,13 +53,9 @@ class QuestionView extends Component {
         <span
           key={i}
           className={`page-num ${i === this.state.page ? 'active' : ''}`}
-          onClick={() => {
-            this.selectPage(i);
-          }}
-        >
-          {i}
+          onClick={() => {this.selectPage(i)}}>{i}
         </span>
-      );
+      )
     }
     return pageNumbers;
   }
@@ -76,7 +73,8 @@ class QuestionView extends Component {
         return;
       },
       error: (error) => {
-        alert('Unable to load questions. Please try your request again');
+        // Changed the error message to be uniq
+        alert('Unable to load question ${id}. Please try your request again');
         return;
       },
     });
@@ -84,7 +82,7 @@ class QuestionView extends Component {
 
   submitSearch = (searchTerm) => {
     $.ajax({
-      url: `/questions`, //TODO: update request URL
+      url: `/questions/search`, //TODO: update request URL
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
@@ -102,7 +100,8 @@ class QuestionView extends Component {
         return;
       },
       error: (error) => {
-        alert('Unable to load questions. Please try your request again');
+        // Changed the error message to be uniq
+        alert('Unable to load questions search. Please try your request again');
         return;
       },
     });
@@ -118,7 +117,7 @@ class QuestionView extends Component {
             this.getQuestions();
           },
           error: (error) => {
-            alert('Unable to load questions. Please try your request again');
+            alert('Unable to delete questions. Please try your request again');
             return;
           },
         });

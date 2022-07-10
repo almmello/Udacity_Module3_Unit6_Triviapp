@@ -28,7 +28,8 @@ class QuizView extends Component {
         return;
       },
       error: (error) => {
-        alert('Unable to load categories. Please try your request again');
+        // Changed the error message to be uniq
+        alert('Unable to load categories from QuizView. Please try your request again');
         return;
       },
     });
@@ -72,7 +73,8 @@ class QuizView extends Component {
         return;
       },
       error: (error) => {
-        alert('Unable to load question. Please try your request again');
+        // Changed the error message to be uniq
+        alert('Unable to load Quizzes. Please try your request again');
         return;
       },
     });

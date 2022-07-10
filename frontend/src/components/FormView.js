@@ -23,7 +23,8 @@ class FormView extends Component {
         return;
       },
       error: (error) => {
-        alert('Unable to load categories. Please try your request again');
+        // Changed the error message to be uniq
+        alert('Unable to load categories from FormView. Please try your request again');
         return;
       },
     });
