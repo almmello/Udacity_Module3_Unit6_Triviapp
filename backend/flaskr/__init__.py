@@ -13,7 +13,7 @@ QUESTIONS_PER_PAGE = 10
 def paginate_questions(request, data):
 
     # retrieve the page number on the request
-    page = request.args.get('page', 1, type=int)
+    page = request.args.get("page", 1, type=int)
 
     # calculate the start question based on the requested page
     start = (page - 1) * QUESTIONS_PER_PAGE
@@ -29,12 +29,11 @@ def paginate_questions(request, data):
 
     return current_questions_page
 
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
     setup_db(app)
-
-
 
     """
     @OK: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
@@ -50,18 +49,12 @@ def create_app(test_config=None):
     @app.after_request
     def after_request(response):
         response.headers.add(
-            "Access-Control-Allow-Headers",
-            "Content-Type, Authorization, true"
+            "Access-Control-Allow-Headers", "Content-Type, Authorization, true"
         )
         response.headers.add(
-            "Access-Control-Allow-Methods",
-            "GET,PUT,POST,DELETE,OPTIONS"
+            "Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS"
         )
         return response
-
-
-
-
 
     """
     @OK:
@@ -74,7 +67,7 @@ def create_app(test_config=None):
     of the questions list in the "List" tab.
     """
 
-    @app.route('/questions', methods=['POST'])
+    @app.route("/questions", methods=["POST"])
     def create_question():
 
         # create the data JSON object
@@ -82,25 +75,27 @@ def create_app(test_config=None):
 
         # create the question_data dictionary from data
         question_data = {
-            'question': data['question'],
-            'answer': data['answer'],
-            'difficulty': data['difficulty'],
-            'category': data['category']
+            "question": data["question"],
+            "answer": data["answer"],
+            "difficulty": data["difficulty"],
+            "category": data["category"],
         }
 
         # check if the data is valid
-        if (question_data['answer'] != "") &\
-                (question_data['question'] != "") &\
-                (question_data['category'] is not None) &\
-                (question_data['difficulty'] is not None):
+        if (
+            (question_data["answer"] != "")
+            & (question_data["question"] != "")
+            & (question_data["category"] is not None)
+            & (question_data["difficulty"] is not None)
+        ):
 
             # use the try-except method to insert the data
             try:
                 new_question = Question(
-                    question=question_data['question'],
-                    answer=question_data['answer'],
-                    category=question_data['category'],
-                    difficulty=question_data['difficulty']
+                    question=question_data["question"],
+                    answer=question_data["answer"],
+                    category=question_data["category"],
+                    difficulty=question_data["difficulty"],
                 )
 
                 new_question.insert()
@@ -112,12 +107,14 @@ def create_app(test_config=None):
                 questions_paginated = paginate_questions(request, query_questions)
 
                 # return the data
-                return jsonify({
-                    'success': True,
-                    'questions': questions_paginated,
-                    'inserted_question': question_data,
-                    'total_questions': len(query_questions)
-                })
+                return jsonify(
+                    {
+                        "success": True,
+                        "questions": questions_paginated,
+                        "inserted_question": question_data,
+                        "total_questions": len(query_questions),
+                    }
+                )
 
             # if insert fails, abort
             except:
@@ -126,7 +123,6 @@ def create_app(test_config=None):
         # if the data is not valid, abort
         else:
             abort(400)
-
 
     """
     @OK:
@@ -141,8 +137,7 @@ def create_app(test_config=None):
     Clicking on the page numbers should update the questions.
     """
 
-
-    @app.route('/questions')
+    @app.route("/questions")
     def read_all_questions():
 
         # using the try-except method to create the query
@@ -158,7 +153,9 @@ def create_app(test_config=None):
             query_categories = Category.query.order_by(db.desc(Category.id)).all()
 
             # format the category to frontend
-            categories_formatted = {category.id: category.type for category in query_categories}
+            categories_formatted = {
+                category.id: category.type for category in query_categories
+            }
 
             # check if the query has no results and abort
             if len(questions_paginated) == 0:
@@ -166,20 +163,23 @@ def create_app(test_config=None):
 
             # if has results, return them
             else:
-                query_categories = {category.id: category.type for category in query_categories}
+                query_categories = {
+                    category.id: category.type for category in query_categories
+                }
 
-                return jsonify({
-                    'success': True,
-                    'questions': questions_paginated,
-                    'categories': categories_formatted,
-                    'total_questions': len(query_questions),
-                    'current_category': ""
-                })
+                return jsonify(
+                    {
+                        "success": True,
+                        "questions": questions_paginated,
+                        "categories": categories_formatted,
+                        "total_questions": len(query_questions),
+                        "current_category": "",
+                    }
+                )
 
         # if the query fails, abort
         except:
             abort(404)
-
 
     """
     @OK:
@@ -193,7 +193,7 @@ def create_app(test_config=None):
     and shown whether they were correct or not.
     """
 
-    @app.route('/quizzes', methods=['POST'])
+    @app.route("/quizzes", methods=["POST"])
     def read_all_quizzes():
 
         # using the try-except method to create the queries
@@ -202,22 +202,27 @@ def create_app(test_config=None):
             data = request.get_json()
 
             # retrieve the category type from data
-            category_type = data['quiz_category']['id']
+            category_type = data["quiz_category"]["id"]
 
             # retrieve the previous questions from data
-            previous_questions = data['previous_questions']
+            previous_questions = data["previous_questions"]
 
             # if there is no specific category, query all, except the previous questions
             if category_type == 0:
-                query_questions = Question.query.filter(Question.id.notin_(previous_questions)).all()
+                query_questions = Question.query.filter(
+                    Question.id.notin_(previous_questions)
+                ).all()
 
             # if the category exists, filter by category
             elif category_type:
-                query_questions = Question.query.filter(Question.category == category_type ,Question.id.notin_(previous_questions)).all()
-            
+                query_questions = Question.query.filter(
+                    Question.category == category_type,
+                    Question.id.notin_(previous_questions),
+                ).all()
+
             # if there are no questions, create an empty result
             if len(query_questions) == 0:
-                query_question = Question("","",None, None).format()
+                query_question = Question("", "", None, None).format()
 
             # if there are results select a randon question
             else:
@@ -225,11 +230,7 @@ def create_app(test_config=None):
 
             # check if there is a question and return it
             if query_question:
-                return jsonify({
-                    'success': True,
-                    'question': query_question
-                })
-                
+                return jsonify({"success": True, "question": query_question})
 
             # if there are no results, abort
             else:
@@ -239,9 +240,8 @@ def create_app(test_config=None):
         except:
             abort(404)
 
-
-    @app.route('/')
-    @app.route('/categories')
+    @app.route("/")
+    @app.route("/categories")
     def read_all_categories():
 
         # using the try-except method to create the query
@@ -257,15 +257,18 @@ def create_app(test_config=None):
             # if has results, return them
             else:
 
-                return jsonify({
-                    'success': True,
-                    'categories': {category.id: category.type for category in query_categories}
-                })
+                return jsonify(
+                    {
+                        "success": True,
+                        "categories": {
+                            category.id: category.type for category in query_categories
+                        },
+                    }
+                )
 
         # if the query fails, abort
         except:
             abort(404)
-
 
     """
     @OK:
@@ -276,17 +279,19 @@ def create_app(test_config=None):
     category to be shown.
     """
 
-    @app.route('/categories/<int:category_id>/questions')
+    @app.route("/categories/<int:category_id>/questions")
     def read_single_category(category_id):
 
         # using the try-except method to create the query
         try:
 
             # create the query category type
-            query_category_type = Category.query.get(category_id).format()['type']
+            query_category_type = Category.query.get(category_id).format()["type"]
 
             # create the query categories filtered by category
-            query_questions = Question.query.filter(Question.category == category_id).all()
+            query_questions = Question.query.filter(
+                Question.category == category_id
+            ).all()
 
             # paginate the query
             questions_paginated = paginate_questions(request, query_questions)
@@ -294,12 +299,14 @@ def create_app(test_config=None):
             # check if the query results and return them
             if len(query_questions):
 
-                return jsonify({
-                    'success': True,
-                    'questions': questions_paginated,
-                    'total_questions': len(query_questions),
-                    'current_category': query_category_type
-                })
+                return jsonify(
+                    {
+                        "success": True,
+                        "questions": questions_paginated,
+                        "total_questions": len(query_questions),
+                        "current_category": query_category_type,
+                    }
+                )
 
             # if there are no results, abort
             else:
@@ -308,7 +315,6 @@ def create_app(test_config=None):
         # if the query fails, abort
         except:
             abort(422)
-
 
     """
     @OK:
@@ -321,7 +327,7 @@ def create_app(test_config=None):
     Try using the word "title" to start.
     """
 
-    @app.route('/questions/search', methods=['POST'])
+    @app.route("/questions/search", methods=["POST"])
     def search_question():
 
         # using the try-except method to create the query
@@ -331,10 +337,12 @@ def create_app(test_config=None):
             data = request.get_json()
 
             # retrieve the search term from data
-            search_term = data['searchTerm']
+            search_term = data["searchTerm"]
 
             # create the query questions filtered by the search term
-            query_questions = Question.query.filter(Question.question.ilike('%'+search_term+'%')).all()
+            query_questions = Question.query.filter(
+                Question.question.ilike("%" + search_term + "%")
+            ).all()
 
             # paginate the query
             questions_paginated = paginate_questions(request, query_questions)
@@ -342,12 +350,14 @@ def create_app(test_config=None):
             # check if the query results and return them
             if len(query_questions):
 
-                return jsonify({
-                    'success': True,
-                    'questions': questions_paginated,
-                    'total_questions': len(query_questions),
-                    'current_category': ""
-                })
+                return jsonify(
+                    {
+                        "success": True,
+                        "questions": questions_paginated,
+                        "total_questions": len(query_questions),
+                        "current_category": "",
+                    }
+                )
 
             # if there are no results, abort
             else:
@@ -357,7 +367,6 @@ def create_app(test_config=None):
         except Exception:
             abort(422)
 
-
     """
     @OK:
     Create an endpoint to DELETE question using a question ID.
@@ -366,7 +375,7 @@ def create_app(test_config=None):
     This removal will persist in the database and when you refresh the page.
     """
 
-    @app.route('/questions/<int:question_id>', methods=['DELETE'])
+    @app.route("/questions/<int:question_id>", methods=["DELETE"])
     def delete_question(question_id):
 
         # using the try-except method to delete the question
@@ -386,12 +395,14 @@ def create_app(test_config=None):
                 questions_paginated = paginate_questions(request, query_questions)
 
                 # return the JSON object with the paginated questions
-                return jsonify({
-                    'success': True,
-                    'questions': questions_paginated,
-                    'total_questions': len(query_questions),
-                    'deleted': question_id
-                })
+                return jsonify(
+                    {
+                        "success": True,
+                        "questions": questions_paginated,
+                        "total_questions": len(query_questions),
+                        "deleted": question_id,
+                    }
+                )
 
             # if the quere is empty, abort
             else:
@@ -400,7 +411,6 @@ def create_app(test_config=None):
         # if the query fails, abort
         except Exception:
             abort(422)
-
 
     @app.errorhandler(404)
     def not_found(error):
@@ -428,4 +438,3 @@ def create_app(test_config=None):
         )
 
     return app
-
