@@ -8,7 +8,7 @@ from trivyur.categories.models import Category
 from trivyur.questions.models import Question
 from trivyur.questions.routes import paginate_questions
 
-from config import Config_Test
+from config import TestingConfig
 
 
 class TriviaTestCase(unittest.TestCase):
@@ -16,7 +16,7 @@ class TriviaTestCase(unittest.TestCase):
 
     def setUp(self):
         """Define test variables and initialize app."""
-        self.app = create_app(config_class=Config_Test)
+        self.app = create_app(config_class=TestingConfig)
         self.client = self.app.test_client
         
         # binds the app to the current context
@@ -47,7 +47,7 @@ class TriviaTestCase(unittest.TestCase):
         # Define questions route
         res = self.client().post('/questions', json=self.new_question)
         
-        # Read data
+        # create the data dictionary from the URL request
         data = json.loads(res.data)
         
         # Check request return
@@ -68,7 +68,7 @@ class TriviaTestCase(unittest.TestCase):
         # Define questions route with wrong URL
         res = self.client().post('/questions/1000', json=self.new_question)
 
-        # Read data
+        # create the data dictionary from the URL request
         data = json.loads(res.data)
 
         # Check request return
@@ -80,10 +80,10 @@ class TriviaTestCase(unittest.TestCase):
     def test_read_all_questions(self):
         # Define questions route
         res = self.client().get('/questions')
-        
-        # Read data
+
+        # create the data dictionary from the URL request
         data = json.loads(res.data)
-        
+
         # Check request return
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -114,7 +114,7 @@ class TriviaTestCase(unittest.TestCase):
         # Define categories route
         res = self.client().get('/questions')
         
-        # Read data
+        # create the data dictionary from the URL request
         data = json.loads(res.data)
         
         # Check request return
@@ -134,7 +134,7 @@ class TriviaTestCase(unittest.TestCase):
         # Define questions route with page out of range
         res = self.client().get('/questions?page=1000')
 
-        # Read data
+        # create the data dictionary from the URL request
         data = json.loads(res.data)
 
         # Check request return
@@ -151,7 +151,7 @@ class TriviaTestCase(unittest.TestCase):
         # Define quizzes route
         res = self.client().post('/quizzes', json={'quiz_category': 1, 'previous_questions': previous_questions})
 
-        # Read data
+        # create the data dictionary from the URL request
         data = json.loads(res.data)
         
         # Check request return
@@ -172,7 +172,7 @@ class TriviaTestCase(unittest.TestCase):
         # Define quizzes route with wrong category
         res = self.client().post('/quizzes', json={'quiz_category': 1000, 'previous_questions': previous_questions})
 
-        # Read data
+        # create the data dictionary from the URL request
         data = json.loads(res.data)
 
         # Check request return
@@ -185,7 +185,7 @@ class TriviaTestCase(unittest.TestCase):
         # Define questions route
         res = self.client().get('/categories/3/questions')
         
-        # Read data
+        # create the data dictionary from the URL request
         data = json.loads(res.data)
         
         # Check request return
@@ -203,7 +203,7 @@ class TriviaTestCase(unittest.TestCase):
         # Define questions route
         res = self.client().get('/categories/1000/questions')
         
-        # Read data
+        # create the data dictionary from the URL request
         data = json.loads(res.data)
         
         # Check request return
@@ -221,7 +221,7 @@ class TriviaTestCase(unittest.TestCase):
         # Define questions route
         res = self.client().post('/questions/search', json={'searchTerm': 'tom'})
         
-        # Read data
+        # create the data dictionary from the URL request
         data = json.loads(res.data)
         
         # create a query for questions using the same term in the route
@@ -244,7 +244,7 @@ class TriviaTestCase(unittest.TestCase):
         # Define questions route
         res = self.client().post('/questions/search', json={'searchTerm': 'qweasdzxc'})
 
-        # Read data
+        # create the data dictionary from the URL request
         data = json.loads(res.data)
 
         # Check request return
@@ -261,7 +261,7 @@ class TriviaTestCase(unittest.TestCase):
         # Define questions route
         res = self.client().delete('/questions/7')
         
-        # Read data
+        # create the data dictionary from the URL request
         data = json.loads(res.data)
         
         # create a query for questions using id used in the route
@@ -285,7 +285,7 @@ class TriviaTestCase(unittest.TestCase):
         # Define questions route
         res = self.client().delete('/books/1000')
 
-        # Read data
+        # create the data dictionary from the URL request
         data = json.loads(res.data)
 
         # Check request return
@@ -293,6 +293,8 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unprocessable')
 
+
+    
 # Make the tests conveniently executable
 if __name__ == "__main__":
     unittest.main()

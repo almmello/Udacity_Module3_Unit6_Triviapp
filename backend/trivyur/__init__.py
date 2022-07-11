@@ -3,28 +3,23 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
 
-# Ading Flask-Migrate
-from flask_migrate import Migrate
 
-
-from config import Config
+from config import ProductionConfig
 
 db = SQLAlchemy()
 
 QUESTIONS_PER_PAGE = 10
 
-def create_app(config_class=Config):
+def create_app():
     # create and configure the app
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object(ProductionConfig)
     
     # setup_db(app)
     db.app = app
     db.init_app(app)
     db.create_all()
 
-    # Adding Migrate
-    migrate = Migrate(app, db)
 
     CORS(app)
 

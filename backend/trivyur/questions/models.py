@@ -3,7 +3,6 @@
 #----------------------------------------------------------------------------#
 from trivyur import db
 
-
 #----------------------------------------------------------------------------#
 # Models.
 #----------------------------------------------------------------------------#
@@ -45,9 +44,6 @@ class Question(db.Model):
 
 
 
-    
-    # Changed relationship to lazy='joined', cascade="all, delete"
-    #shows = db.relationship('Show', backref='artist', lazy='joined', cascade="all, delete")
 
     def __repr__(self):
         return f'<Class ID: {self.id}, QUESTION: {self.question}>'
