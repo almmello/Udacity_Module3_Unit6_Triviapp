@@ -6,12 +6,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flaskr import create_app
 from models import setup_db, Question, Category
 
+# Create pagination method for testing
 def paginate_questions(data):
-    page = 1
-    start = (page - 1) * 10
-    end = start + 10
+
+    # applies the Question.format method on data received
     items = [item.format() for item in data]
-    return items[start:end]
+
+    # creates the return dictionary from zero to 10
+    return items[0:10]
 
 
 class TriviaTestCase(unittest.TestCase):
@@ -75,7 +77,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['total_questions'])
 
 
-    def test_create_question_method_not_allowed(self):
+    def test_create_question_bad_request(self):
 
         # Set an empty question to test
         self.new_question['question'] = ""
@@ -89,7 +91,7 @@ class TriviaTestCase(unittest.TestCase):
         # Check request return
         self.assertEqual(res.status_code, 400)
         self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], "bad request")
+        self.assertEqual(data['message'], 'bad request')
 
 
     def test_read_all_questions(self):
@@ -124,6 +126,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'resource not found')
 
+
     def test_read_all_categories(self):
         # Define categories route
         res = self.client().get('/categories')
@@ -149,7 +152,7 @@ class TriviaTestCase(unittest.TestCase):
 
         # create the data dictionary from the URL request
         data = json.loads(res.data)
-
+        
         # Check request return
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -157,6 +160,7 @@ class TriviaTestCase(unittest.TestCase):
         # Check return data
         self.assertTrue(data['question'])
         self.assertTrue(data['question']['id'] not in previous_questions)
+
 
     def test_read_all_quizzes_not_found(self):
 
@@ -205,7 +209,8 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unprocessable')
         
-        
+
+
     def test_search_question(self):
 
         # Define questions route
@@ -279,19 +284,6 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unprocessable')
-    
-
-
-
-
-
-
-    
-
-
-
-
-
 
     
 # Make the tests conveniently executable
