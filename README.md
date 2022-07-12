@@ -26,6 +26,8 @@ https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvi-debugging-
 https://testdriven.io/blog/flask-pytest/
 https://www.geeksforgeeks.org/read-json-file-using-python/
 https://flask.palletsprojects.com/en/1.1.x/errorhandling/#generic-exception-handlers
+https://www.twilio.com/blog/environment-variables-python
+https://pypi.org/project/python-dotenv/
 
 ## Trivia App
 
