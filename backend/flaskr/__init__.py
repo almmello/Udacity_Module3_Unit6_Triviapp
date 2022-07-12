@@ -4,6 +4,7 @@ from flask import Flask, request, abort, json, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
+from sqlalchemy import true
 from werkzeug.exceptions import HTTPException
 from models import setup_db, Question, Category, db
 
@@ -196,6 +197,9 @@ def create_app(test_config=None):
     @app.route("/quizzes", methods=["POST"])
     def read_all_quizzes():
 
+        # create a force_end variable to terminate the quiz if needed
+        force_end = False
+
         # using the try-except method to create the queries
         try:
             # create the data JSON object
@@ -224,14 +228,23 @@ def create_app(test_config=None):
             if len(query_questions) == 0:
                 query_question = Question("", "", None, None).format()
 
+                # turn force_end true to stop the quiz
+                force_end = true
+
             # if there are results select a randon question
             else:
                 query_question = random.choice(query_questions).format()
 
             # check if there is a question and return it
             if query_question:
-                return jsonify({"success": True, "question": query_question})
 
+                # check if the force_end was raised and return it
+                if force_end:
+                    return jsonify({"forceEnd": True, "success": True})
+
+                # if not, continue with the question
+                else:
+                    return jsonify({"success": True, "question": query_question})
             # if there are no results, abort
             else:
                 abort(422)
