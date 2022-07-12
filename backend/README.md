@@ -21,7 +21,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-#### Key Pip Dependencies
+## Key Pip Dependencies
 
 - [Flask](http://flask.pocoo.org/) is a lightweight backend microservices framework. Flask is required to handle requests and responses.
 
@@ -29,7 +29,7 @@ pip install -r requirements.txt
 
 - [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we'll use to handle cross-origin requests from our frontend server.
 
-### Set up the Database
+## Set up the Database
 
 With Postgres running, create a `trivia` database:
 
@@ -43,19 +43,19 @@ Populate the database using the `trivia.psql` file provided. Then, from the `bac
 psql trivia < trivia.psql
 ```
 
-### Run the Server
+## Run the Server
 
 From within the `./src` directory, ensure you work using your created virtual environment.
 
 To run the server, execute:
 
-"`bash
+```bash
 flask run --reload
 ```
 
 The `--reload` flag will detect file changes and restart the server automatically.
 
-## Development from source files
+# Development from source files
 
 These are the files you'd want to edit in the backend:
 
@@ -449,6 +449,7 @@ curl http://127.0.0.1:5000/quizzes -X POST -H "Content-Type: application/json" -
  }, 
  "success": true
 }
+```
 
 ## DELETE /questions/{question_id}
 

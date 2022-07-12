@@ -33,14 +33,14 @@ The Trivia app is a web app where you can play a trivia game and manage question
 
 ## Achievements
 
-# Created the routes to:
+Created the routes to:
 1. Display all questions by category. Questions show their category and difficulty rating by default and can show/hide the answer.
 2. Delete questions.
 3. Add questions and require that they include a question and answer text.
 4. Search for questions based on a text query string.
 5. Play the quiz game, randomizing all questions or within a specific category.
 
-# Created the Unit Testing for all routes
+Created the Unit Testing for all routes
 
 
 ## About the Stack
